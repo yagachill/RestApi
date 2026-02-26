@@ -1,51 +1,47 @@
+using Microsoft.EntityFrameworkCore;
+using restApi.Data;
+using restApi.Models;
+
 namespace restApi;
 
 public class Program
 {
     public static void Main(string[] args)
     {
+        /*var options = new DbContextOptionsBuilder<AppDbContext>()
+            .UseSqlServer("Server=localhost,1433;Database=MyDatabase;User Id=SA;Password=MissyZora22.;TrustServerCertificate=True;")
+            .Options;
+        using var db = new AppDbContext(options);
+
+        try
+        {
+            if (db.Database.CanConnect())
+                Console.WriteLine("✅ Database connection successful!");
+            else
+                Console.WriteLine("❌ Could not connect to database. Check server, database, user/password.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("❌ Exception: " + ex.Message);
+        }*/
+        
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-        builder.Services.AddAuthorization();
-
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddDbContext<AppDbContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
+        app.MapGet("/users", async (AppDbContext db) => await db.Users.ToListAsync());
+
+        app.MapPost("/users", async (AppDbContext db, User user) =>
         {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
-
-        app.UseHttpsRedirection();
-
-        app.UseAuthorization();
-
-        var summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
-        app.MapGet("/weatherforecast", (HttpContext httpContext) =>
-            {
-                var forecast = Enumerable.Range(1, 5).Select(index =>
-                        new WeatherForecast
-                        {
-                            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                            TemperatureC = Random.Shared.Next(-20, 55),
-                            Summary = summaries[Random.Shared.Next(summaries.Length)]
-                        })
-                    .ToArray();
-                return forecast;
-            })
-            .WithName("GetWeatherForecast")
-            .WithOpenApi();
+            db.Users.Add(user);
+            await db.SaveChangesAsync();
+            return Results.Created($"/users/{user.Id}", user);
+        });
 
         app.Run();
+        
     }
 }
