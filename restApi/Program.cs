@@ -26,21 +26,24 @@ public class Program
         }*/
         
         var builder = WebApplication.CreateBuilder(args);
-
+        builder.Services.AddControllers();
+        
+        
         builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
         var app = builder.Build();
 
-        app.MapGet("/users", async (AppDbContext db) => await db.Users.ToListAsync());
+        /*app.MapGet("/users", async (AppDbContext db) => await db.Users.ToListAsync());
 
         app.MapPost("/users", async (AppDbContext db, User user) =>
         {
             db.Users.Add(user);
             await db.SaveChangesAsync();
             return Results.Created($"/users/{user.Id}", user);
-        });
-
+        });*/
+        
+        app.MapControllers();
         app.Run();
         
     }

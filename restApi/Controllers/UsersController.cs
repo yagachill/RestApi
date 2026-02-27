@@ -14,7 +14,7 @@ public class UsersController : ControllerBase
         _db = db;
     }
 
-    // POST api/Persons
+    // POST api/users
     [HttpPost]
     public IActionResult Create(User user)
     {
@@ -22,7 +22,37 @@ public class UsersController : ControllerBase
         _db.SaveChanges();
         return Ok(user); // Returnerer brukeren med ID generert av databasen
     }
+    
+    [HttpPut("test")]
+    public IActionResult TestPut()
+    {
+        return Ok("PUT works");
+    }
+    
+    // PUT api/user{id}
+    [HttpPut("{id}")]
+    public IActionResult Update(int id, User updatedUser)
+    {
+        // Finn eksisterende bruker i databasen
+        
+        Console.WriteLine($"ID received: {id}");
+        
+        var user = _db.Users.Find(id);
+        if (user == null)
+            return NotFound("User not found");
 
+        // Oppdater felte
+        user.Navn = updatedUser.Navn;
+        user.Mail = updatedUser.Mail;
+        user.Telefon = updatedUser.Telefon;
+
+        // Lagre endringene
+        _db.SaveChanges();
+
+        // Returner den oppdaterte brukeren
+        return Ok(user);
+    }
+    
     // GET api/users
     [HttpGet]
     public IActionResult GetAll()

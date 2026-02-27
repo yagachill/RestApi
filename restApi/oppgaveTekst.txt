@@ -1,0 +1,20 @@
+Fase 1: //Done
+1. Lag et restapi hvor du kan legge til en bruker inn i en database via postman eller lignende.
+ Brukeren skal ha et navn og en optional e-post og en optional telefonnummer.
+
+
+
+Fase 2:
+
+1. Lag et PUT-endpoint hvor man kan endre en bruker. Må kunne validere e-post og nummer er riktig om det blir 
+lagt til. Hvis det er ugyldig må du vise feilmelding fra Apiet.
+
+2. lag et Delete-endpoint som sletter en bruker 
+
+3. lag et GET-endpoint som returnerer en bruker på ID
+
+4. lag en GET/search-endpoint som tar inn en kombinasjon av navn tlf og mail. 
+   Skal returnere liste over brukere med matchende kriterier. 
+   Skal være mulig å skrive inn delvise søkeverdier og fortsatt få treff
+
+5. database skal migreres ved å adde et adressefelt.
