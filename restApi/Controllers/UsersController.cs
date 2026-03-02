@@ -14,7 +14,7 @@ public class UsersController : ControllerBase
         _db = db;
     }
 
-    // POST api/users
+    // POST api/users 'Lager bruker'
     [HttpPost]
     public IActionResult Create(User user)
     {
@@ -29,18 +29,19 @@ public class UsersController : ControllerBase
         return Ok("PUT works");
     }
     
+    
     // PUT api/user{id}
     [HttpPut("{id}")]
     public IActionResult Update(int id, User updatedUser)
     {
         // Finn eksisterende bruker i databasen
         
-        Console.WriteLine($"ID received: {id}");
+        Console.WriteLine($"ID received: {id}"); //Logger hvilken ID som skal oppdateres
         
         var user = _db.Users.Find(id);
         if (user == null)
             return NotFound("User not found");
-
+        
         // Oppdater felte
         user.Navn = updatedUser.Navn;
         user.Mail = updatedUser.Mail;
@@ -59,4 +60,18 @@ public class UsersController : ControllerBase
     {
         return Ok(_db.Users.ToList());
     }
+
+    
+    //Get api/users/{id}
+    [HttpGet("{id}")]
+    public IActionResult Get(int id)
+    {
+        return Ok(_db.Users.Find(id));
+    }
+        
+    
+    
+    
+    
+    
 }
