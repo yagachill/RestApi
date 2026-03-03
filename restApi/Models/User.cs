@@ -1,12 +1,19 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace restApi.Models;
 
 [Table("Persons", Schema = "Persondata")]
-public class User
+ public class User
 {
     public int Id { get; set; } // Primary key i db
+    
+    [Required(ErrorMessage = "Navn er påkrevd")]
     public string Navn {get; set;} 
+    
+    [EmailAddress(ErrorMessage = "Ugyldig e-postadresse")]
     public string? Mail {get; set;}
-    public string? Telefon{get; set;}
+    
+    [RegularExpression(@"^\d{8}$", ErrorMessage = "Telefon må være 8 siffer")]
+    public string? Telefon{ get; set; }
 }

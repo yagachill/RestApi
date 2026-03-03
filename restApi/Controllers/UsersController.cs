@@ -23,11 +23,21 @@ public class UsersController : ControllerBase
         return Ok(user); // Returnerer brukeren med ID generert av databasen
     }
     
-    [HttpPut("test")]
-    public IActionResult TestPut()
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
     {
-        return Ok("PUT works");
-    }
+        Console.WriteLine($"ID received: {id}"); //Logger hvilken ID som skal oppdateres
+        
+        var user = _db.Users.Find(id);
+        if (user == null)
+        {
+            return NotFound("User not found");
+        }
+        
+        _db.Users.Remove(user);
+        _db.SaveChanges();
+        return Ok("Delete works");
+    } 
     
     
     // PUT api/user{id}
@@ -47,7 +57,7 @@ public class UsersController : ControllerBase
         user.Mail = updatedUser.Mail;
         user.Telefon = updatedUser.Telefon;
 
-        // Lagre endringene
+        // Lagre endringene+scv2    
         _db.SaveChanges();
 
         // Returner den oppdaterte brukeren
