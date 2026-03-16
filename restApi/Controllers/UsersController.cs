@@ -50,12 +50,12 @@ public class UsersController : ControllerBase
         
         var user = _db.Users.Find(id);
         if (user == null)
-            return NotFound("User not found");
+            return NotFound(" User Removed");
         
         // Oppdater felte
-        user.Navn = updatedUser.Navn;
-        user.Mail = updatedUser.Mail;
-        user.Telefon = updatedUser.Telefon;
+        user.Name = updatedUser.Name;
+        user.Email = updatedUser.Email;
+        user.Number = updatedUser.Number;
 
         // Lagre endringene+scv2    
         _db.SaveChanges();
@@ -64,13 +64,17 @@ public class UsersController : ControllerBase
         return Ok(user);
     }
     
-    // GET api/users
+    // GET api/users 
+    // GET api/users?search='navn'
     [HttpGet]
-    public IActionResult GetAll()
+    public IActionResult GetAll([FromQuery] string? search)
     {
-        return Ok(_db.Users.ToList());
-    }
+        var query = _db.Users.AsQueryable();
+        if (!string.IsNullOrWhiteSpace(search))
+        query = query.Where(u => u.Name.Contains(search));
 
+        return Ok(query.ToList());
+    }
     
     //Get api/users/{id}
     [HttpGet("{id}")]
@@ -78,6 +82,9 @@ public class UsersController : ControllerBase
     {
         return Ok(_db.Users.Find(id));
     }
+    
+    //Get api/user..
+    
         
     
     
