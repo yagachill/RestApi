@@ -1,0 +1,38 @@
+Her er et ferdig utkast til oppgaveteksten, skrevet på en måte som er motiverende, tydelig og teknisk korrekt. 
+Denne kan du lime rett inn i en melding til ham.
+
+Oppgave: Arkitektur og "Separation of Concerns"
+Nå som du har fått API-et og databasen til å snurre, er neste steg å profesjonalisere koden ved å innføre lagdeling.
+
+I dag er kontrolleren din "altmuligmann" – den styrer både API-responser og snakker direkte med databasen. Det vil vi unngå.
+
+Målet er at koden skal følge denne flyten:
+Controller \rightarrow UserService \rightarrow UserRepository \rightarrow DbContext
+
+Dine 3 krav for oppgaven:
+1. Lag et Datatilgangslag (UserRepository)
+ * Opprett en klasse som heter UserRepository.
+ * Dette er den eneste klassen som har lov til å bruke UserDbContext.
+ * Klassen skal eksponere metoder for lagring og henting (f.eks. GetById, Add, GetAll).
+ * Poeng: Servicen skal ikke vite hvordan data lagres, bare at den kan be Repository om å gjøre det.
+
+2. Lag et Logikklag (UserService)
+ * Opprett en klasse som heter UserService.
+ * Denne klassen skal ikke ta inn UserDbContext, men derimot ta inn UserRepository i konstruktøren sin.
+ * Her skal eventuell logikk ligge (f.eks. sjekke om en bruker eksisterer før den legges til).
+
+3. Rydd opp i Controlleren
+ * Controlleren får ikke lenger lov til å ha UserDbContext i konstruktøren.
+ * Den skal nå kun ta inn UserService.
+ * Oppgaven til Controlleren skal bare være å ta imot HTTP-kall og returnere riktig statuskode (200 OK, 404 Not Found, osv.) ved å bruke metodene i UserService.
+
+
+
+// Når oppgaven er fullført skal vi være istand til å forklare dette - Personlig mål. 
+Hvorfor gjør du dette?
+Ved å skille lagene slik, oppnår du:
+ * Ryddighet: Hver klasse har én jobb (Single Responsibility).
+ * Utskiftbarhet: Hvis vi bytter ut Entity Framework med noe annet senere, trenger vi bare å endre UserRepository. Resten av appen merker ingenting.
+ * Testbarhet: Det blir mye enklere å skrive tester for logikken din uten å måtte koble til en ekte database.
+Lykke til! Spør hvis du står fast i "Dependency Injection"-oppsettet i Program.cs.
+Vil du at jeg skal sette opp et enkelt kodeeksempel på hvordan UserRepository og UserService bør se ut, slik at du har en fasit klar?

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using restApi.Data;
 using restApi.Models;
+using restApi.Repositories;
 
 namespace restApi.Controllers;
 
@@ -8,6 +9,7 @@ namespace restApi.Controllers;
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
+    private readonly UserRepository _userRepository;
     private readonly AppDbContext _db;
     public UsersController(AppDbContext db)
     {
