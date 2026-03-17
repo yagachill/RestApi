@@ -4,7 +4,7 @@ Fase 1: //Done
 
 
 
-Fase 2:
+Fase 2: // done
 
 1. Lag et PUT-endpoint hvor man kan endre en bruker. Må kunne validere e-post og nummer er riktig om det blir 
 lagt til. Hvis det er ugyldig må du vise feilmelding fra Apiet.
